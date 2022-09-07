@@ -180,16 +180,16 @@ void Widget::modifyUser(QPushButton *btn, QTableWidgetItem *item)
         btn->setText("Save");
         m_tableWidget->item(row, 0)->setFlags(nameFlag | (Qt::ItemIsEditable));     //用户名->可编辑
         m_tableWidget->item(row, 1)->setFlags(pwdFlag | (Qt::ItemIsEditable));      //密码->可编辑
-        m_creatBtn->setEnabled(false);
+        m_creatBtn->setEnabled(false);      //禁用新用户按钮
     }
     else if(!m_userName.contains(m_tableWidget->item(row, 0)->text()))  //不存在重复用户名
     {
         btn->setText("Modify");
         m_tableWidget->item(row, 0)->setFlags(nameFlag & (~Qt::ItemIsEditable));    //用户名->可编辑
         m_tableWidget->item(row, 1)->setFlags(pwdFlag & (~Qt::ItemIsEditable));     //密码->不可编辑
-        m_creatBtn->setEnabled(true);
+        m_creatBtn->setEnabled(true);      //禁用新用户按钮
         m_userInfo->setValue(m_tableWidget->item(row, 0)->text() + "/" + "Password", m_tableWidget->item(row, 1)->text());
-        readUserData(); //更新m_userName 和 m_password
+        readUserData();                    //更新m_userName 和 m_password
     }
     else
     {
