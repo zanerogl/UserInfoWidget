@@ -34,7 +34,6 @@ void Widget::initProfile()
 {
     m_userInfo = new QSettings(m_filePath, QSettings::IniFormat);
     userCount = m_userInfo->childGroups().size(); //用户数量 == 组数 == 键数/每组键数
-//    qDebug()<<__LINE__<<__FUNCTION__<<"userCount:"<<userCount;
 }
 
 void Widget::initUI()
@@ -86,7 +85,6 @@ void Widget::initUI()
     m_cancelBtn->setText("Cancel");
     m_cancelBtn->setStyleSheet("QPushButton{background: white; color: blacke; border: 2px solid black; border-radius:10px; padding:2px 4px;}");
     m_cancelBtn->hide();
-//    qDebug()<<__LINE__<<__FUNCTION__;
 }
 
 void Widget::loadUserInfo(QList<QString> userName, QList<QString> userPassword)
@@ -129,11 +127,7 @@ void Widget::loadUserInfo(QList<QString> userName, QList<QString> userPassword)
         m_tableWidget->setCellWidget(i, 2,  widget);
 
         connect(btnDel, &QPushButton::clicked, [=](){this->removeUser(nameItem);});
-        connect(btnUpdate, &QPushButton::clicked, [=]()
-        {
-//            QString str = m_tableWidget->item(row, 0)->text();
-            this->modifyUser(btnUpdate, nameItem);
-        });
+        connect(btnUpdate, &QPushButton::clicked, [=](){this->modifyUser(btnUpdate, nameItem);});
     }
 }
 
@@ -158,9 +152,7 @@ void Widget::removeUser(QTableWidgetItem *item)
     if(QMessageBox::question(this, "Tip","Are you sure you want to delete?", QMessageBox::Yes|QMessageBox::No)== QMessageBox::Yes)
     {
         userCount--;
-//        qDebug()<<__LINE__<<"userCount:"<<userCount;
         int row = m_tableWidget->row(item);
-//        qDebug()<<row;
         QString user = m_tableWidget->item(row, 0)->text();
         m_userInfo->remove(user + "/" + "Password");
         m_tableWidget->removeRow(row);
@@ -169,11 +161,9 @@ void Widget::removeUser(QTableWidgetItem *item)
 
 void Widget::modifyUser(QPushButton *btn, QTableWidgetItem *item)
 {
-//    qDebug()<<__FUNCTION__;
     int row = m_tableWidget->row(item);
     Qt::ItemFlags nameFlag = m_tableWidget->item(row, 0)->flags();
     Qt::ItemFlags pwdFlag = m_tableWidget->item(row, 1)->flags();
-
 
     if(btn->text() == "Modify")
     {
@@ -199,9 +189,7 @@ void Widget::modifyUser(QPushButton *btn, QTableWidgetItem *item)
 
 void Widget::addUser()
 {
-//    qDebug()<<__FUNCTION__;
     m_tableWidget->setRowCount(m_tableWidget->rowCount()+1);
-//    qDebug()<<__LINE__<<"Row count:"<<m_tableWidget->rowCount()<<"userCount:"<<userCount;
 
     int row = m_tableWidget->rowCount()-1;
     /*用户名*/
@@ -234,7 +222,6 @@ void Widget::on_saveBtnisClicked()
 
     if(!m_userName.contains(m_tableWidget->item(row, 0)->text()))
     {
-//        qDebug()<<m_tableWidget->item(row, 0)->text();
         m_saveBtn->hide();
         m_cancelBtn->hide();
         m_creatBtn->show();
