@@ -113,7 +113,6 @@ private:
 
     QStringList m_userName;
     QStringList m_password;
-    QStringList m_premission;
 };
 #endif // WIDGET_H
 
