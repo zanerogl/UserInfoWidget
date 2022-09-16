@@ -16,7 +16,6 @@ Widget::Widget(QWidget *parent)
 
     connect(m_saveBtn, &QPushButton::clicked, this, &Widget::on_saveBtnisClicked);
     connect(m_cancelBtn, &QPushButton::clicked, this, &Widget::on_cancelBtnisClicked);
-
 }
 
 Widget::~Widget()
@@ -45,12 +44,12 @@ void Widget::initUI()
     m_gridLayout = new QGridLayout(this);
 
     /*设置布局*/
-    QSpacerItem *verticalSpacer = new QSpacerItem(20, 60, QSizePolicy::Minimum, QSizePolicy::Fixed);
+    m_verticalSpacer = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Fixed);
     m_gridLayout->addWidget(m_tableWidget, 0, 0, 1, 4);
-    m_gridLayout->addWidget(m_creatBtn, 1, 1, 2, 2);    //位于第一行第一列，占两行两列是因为点击后出现的两个按钮需要占两列
-    m_gridLayout->addWidget(m_saveBtn, 1, 1, 2, 1);
-    m_gridLayout->addWidget(m_cancelBtn, 1, 2, 2, 1);
-    m_gridLayout->addItem(verticalSpacer, 2, 1, 1, 1);
+    m_gridLayout->addWidget(m_creatBtn, 1, 1, 1, 2);    //位于第一行第一列，占两行两列是因为点击后出现的两个按钮需要占两列
+    m_gridLayout->addWidget(m_saveBtn, 1, 1, 1, 1);
+    m_gridLayout->addWidget(m_cancelBtn, 1, 2, 1, 1);
+    m_gridLayout->addItem(m_verticalSpacer, 2, 1, 1, 1);
     m_gridLayout->setMargin(3);
 
     /*设置TableWidget属性*/
@@ -167,13 +166,16 @@ void Widget::modifyUser(QPushButton *btn, QTableWidgetItem *item)
 
     if(btn->text() == "Modify")
     {
+//        connect(m_tableWidget, &QTableWidget::itemClicked, this, &Widget::test);
+        m_exName = m_tableWidget->item(row, 0)->text();   //保存旧用户名
         btn->setText("Save");
         m_tableWidget->item(row, 0)->setFlags(nameFlag | (Qt::ItemIsEditable));     //用户名->可编辑
         m_tableWidget->item(row, 1)->setFlags(pwdFlag | (Qt::ItemIsEditable));      //密码->可编辑
         m_creatBtn->setEnabled(false);      //禁用新用户按钮
     }
-    else if(!m_userName.contains(m_tableWidget->item(row, 0)->text()))  //不存在重复用户名
+    else if(!m_userName.contains(m_tableWidget->item(row, 0)->text()) || m_tableWidget->item(row, 0)->text()==m_exName)  //不存在重复用户名
     {
+//        disconnect(m_tableWidget, &QTableWidget::itemClicked, this, &Widget::test);
         btn->setText("Modify");
         m_tableWidget->item(row, 0)->setFlags(nameFlag & (~Qt::ItemIsEditable));    //用户名->可编辑
         m_tableWidget->item(row, 1)->setFlags(pwdFlag & (~Qt::ItemIsEditable));     //密码->不可编辑
@@ -273,5 +275,10 @@ void Widget::readUserData()
     {
         m_password<<m_userInfo->value(m_userName.at(userIndex) + "/" + "Password", 1024).toString();
     }
+}
+
+void Widget::test()
+{
+    qDebug()<<"isClicked";
 }
 

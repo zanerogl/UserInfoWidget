@@ -95,11 +95,17 @@ public slots:
      */
     void readUserData();
 
+    /**
+     * @brief test
+     */
+    void test();
+
 private:
     Ui::Widget *ui;
 
     QTableWidget *m_tableWidget;
     QGridLayout *m_gridLayout;
+    QSpacerItem *m_verticalSpacer;
     QPushButton *btnDel;
     QPushButton *btnUpdate;
     QPushButton *m_creatBtn;
@@ -113,6 +119,8 @@ private:
 
     QStringList m_userName;
     QStringList m_password;
+
+    QString m_exName;
 };
 #endif // WIDGET_H
 
