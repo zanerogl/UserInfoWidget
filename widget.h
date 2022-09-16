@@ -20,6 +20,10 @@
 #include <fstream>
 #include <cstring>
 #include <string>
+
+#include "keyboard.h"
+
+
 using namespace std;
 
 /*隐式BUG：item未双击进入可编辑状态前，编辑item会导致程序崩溃退出*/
@@ -121,6 +125,10 @@ private:
     QStringList m_password;
 
     QString m_exName;
+    bool m_state = false;
+
+    Keyboard *m_keyboard = nullptr;
+
 };
 #endif // WIDGET_H
 

@@ -7,6 +7,8 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
+    m_keyboard = new Keyboard(this);
+
     initProfile();
     initUI();
 
@@ -21,6 +23,8 @@ Widget::Widget(QWidget *parent)
 Widget::~Widget()
 {
     delete ui;
+//    delete m_verticalSpacer;
+//    m_verticalSpacer = nullptr;
 //    deleteButtons();
 //    if(m_tableWidget!=NULL)
 //    {
@@ -166,22 +170,53 @@ void Widget::modifyUser(QPushButton *btn, QTableWidgetItem *item)
 
     if(btn->text() == "Modify")
     {
-//        connect(m_tableWidget, &QTableWidget::itemClicked, this, &Widget::test);
-        m_exName = m_tableWidget->item(row, 0)->text();   //保存旧用户名
-        btn->setText("Save");
-        m_tableWidget->item(row, 0)->setFlags(nameFlag | (Qt::ItemIsEditable));     //用户名->可编辑
-        m_tableWidget->item(row, 1)->setFlags(pwdFlag | (Qt::ItemIsEditable));      //密码->可编辑
-        m_creatBtn->setEnabled(false);      //禁用新用户按钮
+        if(!m_state)
+        {
+            m_exName = m_tableWidget->item(row, 0)->text();   //保存旧用户名
+            btn->setText("Save");
+            m_tableWidget->item(row, 0)->setFlags(nameFlag | (Qt::ItemIsEditable));     //用户名->可编辑
+            m_tableWidget->item(row, 1)->setFlags(pwdFlag | (Qt::ItemIsEditable));      //密码->可编辑
+            m_creatBtn->setEnabled(false);      //禁用新用户按钮
+
+            /*键盘弹出*/
+            m_state = !m_state;
+//            qDebug()<<m_state;
+//            if(m_verticalSpacer != nullptr)
+//            {
+//                qDebug()<<__LINE__;
+//                delete m_verticalSpacer;
+//                m_verticalSpacer = nullptr;
+//                m_verticalSpacer = new QSpacerItem(20, this->height()/3, QSizePolicy::Minimum, QSizePolicy::Fixed);
+//                m_gridLayout->addItem(m_verticalSpacer, 2, 1, 1, 1);
+//            }
+//            m_keyboard->popUp(0, this->height()/3);
+        }
+
     }
-    else if(!m_userName.contains(m_tableWidget->item(row, 0)->text()) || m_tableWidget->item(row, 0)->text()==m_exName)  //不存在重复用户名
+    else if((!m_userName.contains(m_tableWidget->item(row, 0)->text()) || m_tableWidget->item(row, 0)->text()==m_exName))  //不存在重复用户名
     {
-//        disconnect(m_tableWidget, &QTableWidget::itemClicked, this, &Widget::test);
-        btn->setText("Modify");
-        m_tableWidget->item(row, 0)->setFlags(nameFlag & (~Qt::ItemIsEditable));    //用户名->可编辑
-        m_tableWidget->item(row, 1)->setFlags(pwdFlag & (~Qt::ItemIsEditable));     //密码->不可编辑
-        m_creatBtn->setEnabled(true);      //禁用新用户按钮
-        m_userInfo->setValue(m_tableWidget->item(row, 0)->text() + "/" + "Password", m_tableWidget->item(row, 1)->text());
-        readUserData();                    //更新m_userName 和 m_password
+        if(m_state)
+        {
+            btn->setText("Modify");
+            m_tableWidget->item(row, 0)->setFlags(nameFlag & (~Qt::ItemIsEditable));    //用户名->可编辑
+            m_tableWidget->item(row, 1)->setFlags(pwdFlag & (~Qt::ItemIsEditable));     //密码->不可编辑
+            m_creatBtn->setEnabled(true);      //禁用新用户按钮
+            m_userInfo->setValue(m_tableWidget->item(row, 0)->text() + "/" + "Password", m_tableWidget->item(row, 1)->text());
+            readUserData();                    //更新m_userName 和 m_password
+
+            /*键盘弹出*/
+            m_state = !m_state;
+//            qDebug()<<m_state;
+//            if(m_verticalSpacer != nullptr)
+//            {
+//                delete m_verticalSpacer;
+//                m_verticalSpacer = nullptr;
+//                m_verticalSpacer = new QSpacerItem(20, 30, QSizePolicy::Minimum, QSizePolicy::Fixed);
+//                m_gridLayout->addItem(m_verticalSpacer, 2, 1, 1, 1);
+//                qDebug()<<__LINE__;
+//            }
+//            m_keyboard->popIn(0, this->height()/3);
+        }
     }
     else
     {
